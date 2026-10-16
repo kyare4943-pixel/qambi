@@ -1,0 +1,1216 @@
+<!DOCTYPE html>
+<html lang="so" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>QAMBI FILIMS - Shineemada Casriga ah & 3D Khibrad</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  
+  <!-- Three.js CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  
+  <!-- Custom Stylesheet -->
+  <link rel="stylesheet" href="css/style.css" />
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              red: '#e50914',
+              hoverRed: '#b91c1c',
+              dark: '#07090e',
+              card: '#0f172a',
+              gold: '#ffb800'
+            }
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-[#07090e] text-gray-100 flex flex-col min-h-screen">
+
+  <!-- ========================================================
+       1. NAVIGATION BAR (MURAAYAD GLASSOVERLAY)
+       ======================================================== -->
+  <header class="fixed top-0 left-0 right-0 z-50 glass-nav transition-all duration-300">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-4">
+      
+      <!-- Brand Logo -->
+      <a href="#" class="flex items-center gap-3 group">
+        <div class="w-11 h-11 rounded-xl bg-gradient-to-tr from-red-600 via-red-500 to-amber-500 flex items-center justify-center text-white shadow-lg shadow-red-600/40 group-hover:scale-105 transition-transform duration-300">
+          <i class="fa-solid fa-clapperboard text-xl"></i>
+        </div>
+        <div class="flex flex-col">
+          <span class="font-cinzel text-xl sm:text-2xl font-black tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-white via-cyan-200 to-blue-500 group-hover:to-cyan-400 transition-colors">
+            QAMBI <span class="text-cyan-400 font-sans font-extrabold">FILIMS</span>
+          </span>
+        </div>
+      </a>
+
+      <!-- Quick Search Bar (Desktop) -->
+      <div class="hidden md:flex flex-1 max-w-md mx-6">
+        <div class="relative w-full">
+          <input 
+            type="text" 
+            id="nav-search"
+            placeholder="Raadi filim, jilaa, sanad ama sheeko..." 
+            class="w-full bg-gray-900/80 border border-blue-900/40 rounded-full py-2.5 pl-11 pr-4 text-sm text-gray-200 placeholder-gray-400 focus:outline-none focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20 transition-all backdrop-blur-md"
+          />
+          <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-cyan-400 text-sm"></i>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="flex items-center gap-2 sm:gap-3">
+        <!-- Auth Container (Login / User Profile) -->
+        <div id="auth-nav-container">
+          <button 
+            id="open-login-btn"
+            class="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-bold rounded-full bg-blue-600/20 hover:bg-blue-600/30 border border-blue-500/40 text-cyan-300 hover:text-white transition-all shadow-md active:scale-95"
+            title="Gal ama Sameyso Koonto"
+          >
+            <i class="fa-solid fa-user text-xs"></i>
+            <span>Gal / Login</span>
+          </button>
+        </div>
+
+        <!-- Quick Link: Af-Soomaali -->
+        <button 
+          onclick="window.QAMBI_APP.setGenreFilter('Af-Soomaali')"
+          class="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg bg-blue-950/60 border border-blue-500/40 text-blue-300 hover:bg-blue-900/50 transition-colors"
+        >
+          <i class="fa-solid fa-language text-blue-400"></i> Af-Soomaali
+        </button>
+
+        <!-- Owner Controls (Admin Panel & Ku Dar Filim) - Strictly for Qambimustafe@gmail.com -->
+        <div id="owner-controls" class="hidden items-center gap-2 sm:gap-3">
+          <!-- Admin Panel Button -->
+          <button 
+            id="open-admin-btn"
+            class="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-bold rounded-full bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/40 text-amber-300 hover:text-white transition-all shadow-md shadow-amber-500/10 active:scale-95"
+            title="Fur Dashboard-ka Maamulka Admin-ka (Owner Kaliya)"
+          >
+            <i class="fa-solid fa-crown text-amber-400"></i>
+            <span>Admin Panel</span>
+          </button>
+
+          <!-- "+ Ku Dar Filim" Button -->
+          <button 
+            class="open-add-movie-btn bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-500 hover:to-cyan-500 text-white font-bold px-3.5 sm:px-4 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm flex items-center gap-2 shadow-lg shadow-cyan-500/20 transition-all transform hover:scale-105 active:scale-95"
+            title="Ku Dar Filim Cusub (Owner Kaliya)"
+          >
+            <i class="fa-solid fa-plus text-sm"></i>
+            <span>Ku Dar Filim</span>
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- ========================================================
+       TOP XAYAYSIIS: QORAAL CAS OO WAREEGAYA (RED TICKER MARQUEE)
+       ======================================================== -->
+  <div class="fixed top-20 left-0 right-0 z-40 bg-gradient-to-r from-red-950/90 via-black to-red-950/90 border-b border-red-600/40 py-2.5 shadow-lg shadow-red-950/50 backdrop-blur-md overflow-hidden">
+    <div class="max-w-7xl mx-auto px-4 flex items-center gap-3">
+      
+      <!-- Xayaysiis Badge -->
+      <div class="shrink-0 flex items-center gap-1.5 bg-gradient-to-r from-red-600 to-red-700 text-white text-[11px] font-black px-3 py-1 rounded-md shadow-md uppercase tracking-wider">
+        <i class="fa-solid fa-bullhorn animate-pulse text-amber-300 text-xs"></i>
+        <span>XAYAYSIIS:</span>
+      </div>
+
+      <!-- Scrolling Marquee Text -->
+      <div class="marquee-wrapper flex-1">
+        <div class="marquee-content font-black text-xs sm:text-sm text-red-500 uppercase tracking-wider drop-shadow-[0_0_15px_rgba(239,68,68,0.7)]">
+          <span><i class="fa-solid fa-clapperboard text-red-400 mr-2"></i>Qambi Filims ka hel filimo Hindi, Maraykan oo Af-Soomaali ah</span>
+          <span class="text-amber-400">★</span>
+          <span><i class="fa-solid fa-film text-red-400 mr-2"></i>Qambi Filims ka hel filimo Hindi, Maraykan oo Af-Soomaali ah</span>
+          <span class="text-amber-400">★</span>
+          <span><i class="fa-solid fa-clapperboard text-red-400 mr-2"></i>Qambi Filims ka hel filimo Hindi, Maraykan oo Af-Soomaali ah</span>
+          <span class="text-amber-400">★</span>
+          <span><i class="fa-solid fa-film text-red-400 mr-2"></i>Qambi Filims ka hel filimo Hindi, Maraykan oo Af-Soomaali ah</span>
+          <span class="text-amber-400">★</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ========================================================
+       2. HERO SECTION: 3D BLUE PARTICLES GALAXY
+       ======================================================== -->
+  <section class="relative w-full min-h-[85vh] lg:min-h-[90vh] pt-32 flex items-center justify-center overflow-hidden bg-gradient-to-b from-[#030712] via-[#040e22] to-[#040814]">
+    
+    <!-- Three.js 3D Blue Particles Canvas Container -->
+    <div id="hero-canvas-container" class="cursor-crosshair"></div>
+
+    <!-- Blue Ambient Vignette -->
+    <div class="absolute inset-0 pointer-events-none bg-radial-gradient from-transparent via-[#030712]/40 to-[#030712] z-[2]"></div>
+    <div class="absolute inset-0 pointer-events-none bg-gradient-to-t from-[#040814] via-transparent to-transparent z-[2]"></div>
+
+    <!-- Hero Content Overlay (Clean, Center-aligned & Majestic) -->
+    <div class="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 py-16 w-full flex flex-col items-center justify-center text-center">
+      <div class="hero-overlay flex flex-col items-center">
+        
+        <!-- Clean Glowing Title -->
+        <h1 class="font-cinzel text-4xl sm:text-6xl lg:text-7xl font-black text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-sky-100 to-blue-500 tracking-wider drop-shadow-2xl mb-6">
+          QAMBI <span class="text-cyan-400 font-sans font-extrabold">FILIMS</span>
+        </h1>
+
+        <!-- Hero Tagline (Visible to all visitors) -->
+        <p class="text-xs sm:text-sm text-cyan-200/80 max-w-lg mb-6 font-medium tracking-wide">
+          Madal casri ah oo 3D ah oo aad ka heli karto filimada Hindi & Maraykan oo Af-Soomaali ah.
+        </p>
+
+        <!-- Action CTA Buttons (Owner Only: Strictly Qambimustafe@gmail.com - Hidden by default) -->
+        <div id="hero-owner-controls" class="hidden flex-wrap items-center justify-center gap-4 hero-interactive">
+          <button 
+            class="open-add-movie-btn bg-gradient-to-r from-blue-600 via-cyan-600 to-blue-600 hover:from-blue-500 hover:to-cyan-500 text-white font-black px-8 py-3.5 rounded-full text-sm sm:text-base flex items-center gap-2.5 shadow-xl shadow-cyan-500/30 hover:scale-105 active:scale-95 transition-all"
+            title="Ku Dar Filim Cusub (Owner Kaliya)"
+          >
+            <i class="fa-solid fa-plus text-base"></i>
+            <span>Ku Dar Filim Cusub</span>
+          </button>
+
+          <button 
+            onclick="window.QAMBI_APP.openAdminModal()"
+            class="glass-panel text-white hover:text-amber-300 font-semibold px-7 py-3.5 rounded-full text-sm sm:text-base flex items-center gap-2.5 border border-amber-500/40 hover:border-amber-400 transition-all backdrop-blur-md hover:bg-amber-500/10 active:scale-95"
+            title="Fur Dashboard-ka Maamulka Admin-ka (Owner Kaliya)"
+          >
+            <i class="fa-solid fa-crown text-amber-400 text-base"></i>
+            <span>Admin Panel</span>
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================
+       3. SEARCH & FILTER CONTROLS BAR (SANADKA & QEYBAHA)
+       ======================================================== -->
+  <section id="filimada" class="relative z-20 -mt-6 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+    <div class="glass-panel rounded-2xl p-6 shadow-2xl shadow-black/80 border border-gray-800">
+      
+      <!-- Top Row: Search Input (Clean & Centered) -->
+      <div class="flex items-center justify-center pb-5 border-b border-gray-800">
+        <div class="relative w-full max-w-2xl">
+          <input 
+            type="text" 
+            id="filter-search" 
+            placeholder="Ka raadi magac, taariikh, faahfaahin..." 
+            class="w-full bg-gray-900/90 border border-gray-700/80 rounded-2xl py-3.5 pl-12 pr-10 text-sm text-gray-100 placeholder-gray-400 focus:outline-none focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20 transition-all shadow-inner"
+          />
+          <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-cyan-400"></i>
+          <button id="clear-search-btn" class="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white transition-colors p-1" title="Tirtir qoraalka">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Middle Row: DOORO SANADKA (YEAR FILTER) -->
+      <div class="pt-5 flex flex-col md:flex-row md:items-center gap-4">
+        
+        <!-- Year label & Dropdown -->
+        <div class="flex items-center gap-3 shrink-0">
+          <span class="text-xs font-bold uppercase tracking-wider text-red-400 flex items-center gap-1.5">
+            <i class="fa-solid fa-calendar-days"></i> Dooro Sanadka:
+          </span>
+          <select 
+            id="year-filter-select"
+            class="bg-gray-900 border border-gray-700 text-white text-xs sm:text-sm rounded-lg px-3 py-2 focus:outline-none focus:border-red-500 transition-colors"
+          >
+            <option value="all">Dhammaan Sanadaha</option>
+            <option value="2026">Sanadka 2026 (Cusub)</option>
+            <option value="2025">Sanadka 2025</option>
+            <option value="2024">Sanadka 2024</option>
+            <option value="2023">Sanadka 2023</option>
+            <option value="2022">Sanadka 2022</option>
+            <option value="2021">Sanadka 2021</option>
+            <option value="older">2020 & Ka Hor</option>
+          </select>
+        </div>
+
+        <!-- Quick Year Chips -->
+        <div class="flex items-center gap-2 overflow-x-auto pb-2 md:pb-0 scrollbar-none text-xs">
+          <button data-year-filter="all" class="filter-chip active px-3.5 py-1.5 rounded-full font-semibold whitespace-nowrap bg-gray-900 text-gray-300">
+            Dhammaan <span class="year-count opacity-70 ml-1"></span>
+          </button>
+          <button data-year-filter="2026" class="filter-chip px-3.5 py-1.5 rounded-full font-semibold whitespace-nowrap bg-gray-900 text-gray-300">
+            2026 <span class="year-count opacity-70 ml-1"></span>
+          </button>
+          <button data-year-filter="2025" class="filter-chip px-3.5 py-1.5 rounded-full font-semibold whitespace-nowrap bg-gray-900 text-gray-300">
+            2025 <span class="year-count opacity-70 ml-1"></span>
+          </button>
+          <button data-year-filter="2024" class="filter-chip px-3.5 py-1.5 rounded-full font-semibold whitespace-nowrap bg-gray-900 text-gray-300">
+            2024 <span class="year-count opacity-70 ml-1"></span>
+          </button>
+          <button data-year-filter="2023" class="filter-chip px-3.5 py-1.5 rounded-full font-semibold whitespace-nowrap bg-gray-900 text-gray-300">
+            2023 <span class="year-count opacity-70 ml-1"></span>
+          </button>
+          <button data-year-filter="2022" class="filter-chip px-3.5 py-1.5 rounded-full font-semibold whitespace-nowrap bg-gray-900 text-gray-300">
+            2022 <span class="year-count opacity-70 ml-1"></span>
+          </button>
+          <button data-year-filter="older" class="filter-chip px-3.5 py-1.5 rounded-full font-semibold whitespace-nowrap bg-gray-900 text-gray-300">
+            2020 & Ka Hor <span class="year-count opacity-70 ml-1"></span>
+          </button>
+        </div>
+
+      </div>
+
+      <!-- Bottom Row: QEYBAHA (GENRE FILTER) & SORTING -->
+      <div class="mt-4 pt-4 border-t border-gray-800/80 flex flex-col md:flex-row md:items-center justify-between gap-4">
+        
+        <!-- Genre Filter Chips -->
+        <div class="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none text-xs">
+          <span class="text-gray-400 font-bold uppercase text-[11px] tracking-wider shrink-0 mr-1">
+            Qeybta:
+          </span>
+          <button data-genre-filter="all" class="filter-chip active px-3 py-1.5 rounded-lg font-medium whitespace-nowrap bg-gray-900 text-gray-300">
+            Dhammaan
+          </button>
+          <button data-genre-filter="Af-Soomaali" class="filter-chip px-3 py-1.5 rounded-lg font-medium whitespace-nowrap bg-gray-900 text-cyan-300 border-cyan-800/50">
+            ⭐ Af-Soomaali
+          </button>
+          <button data-genre-filter="Action" class="filter-chip px-3 py-1.5 rounded-lg font-medium whitespace-nowrap bg-gray-900 text-gray-300">
+            Action
+          </button>
+          <button data-genre-filter="Drama" class="filter-chip px-3 py-1.5 rounded-lg font-medium whitespace-nowrap bg-gray-900 text-gray-300">
+            Drama
+          </button>
+          <button data-genre-filter="Musalsal" class="filter-chip px-3 py-1.5 rounded-lg font-medium whitespace-nowrap bg-gray-900 text-gray-300">
+            Musalsal
+          </button>
+          <button data-genre-filter="Comedy" class="filter-chip px-3 py-1.5 rounded-lg font-medium whitespace-nowrap bg-gray-900 text-gray-300">
+            Majaajilo
+          </button>
+          <button data-genre-filter="Sci-Fi" class="filter-chip px-3 py-1.5 rounded-lg font-medium whitespace-nowrap bg-gray-900 text-gray-300">
+            Sci-Fi
+          </button>
+          <button data-genre-filter="Horror" class="filter-chip px-3 py-1.5 rounded-lg font-medium whitespace-nowrap bg-gray-900 text-gray-300">
+            Naxdin (Horror)
+          </button>
+        </div>
+
+        <!-- Sort Option & Counter -->
+        <div class="flex items-center justify-between md:justify-end gap-3 shrink-0">
+          <span id="movies-count-badge" class="text-xs text-gray-400 font-semibold bg-gray-900 px-3 py-1.5 rounded-md border border-gray-800">
+            Waxaa la helay: 12 filim
+          </span>
+          <select 
+            id="sort-select"
+            class="bg-gray-900 border border-gray-700 text-gray-300 text-xs rounded-lg px-2.5 py-1.5 focus:outline-none focus:border-red-500"
+          >
+            <option value="newest">Ugu Cusub (Sanadka)</option>
+            <option value="rating">Ugu Qiimeyn Sareeya</option>
+            <option value="title">Magaca (A-Z)</option>
+          </select>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ========================================================
+       4. MOVIE CARDS GRID SECTION
+       ======================================================== -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 flex-grow w-full">
+    
+    <!-- Dynamic Movies Grid -->
+    <div id="movies-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 sm:gap-8">
+      <!-- Generated dynamically by app.js with 3D tilt effects -->
+    </div>
+
+    <!-- Empty State -->
+    <div id="empty-state" class="hidden text-center py-20">
+      <div class="w-20 h-20 mx-auto rounded-full bg-gray-800/80 border border-gray-700 flex items-center justify-center text-3xl text-gray-500 mb-4">
+        <i class="fa-solid fa-magnifying-glass"></i>
+      </div>
+      <h3 class="text-xl font-bold text-white mb-2">Lama helin filim ku habboon</h3>
+      <p class="text-gray-400 text-sm max-w-md mx-auto mb-6">
+        Wax natiijo ah lagama helin raadintaada ama sanadka aad dooratay. Fadlan isku day sanad kale ama tirtir qoraalka raadinta.
+      </p>
+      <button 
+        onclick="window.QAMBI_APP.setYearFilter('all'); window.QAMBI_APP.setGenreFilter('all'); document.getElementById('filter-search').value=''; window.QAMBI_APP.searchQuery='';"
+        class="bg-red-600 hover:bg-red-700 text-white font-bold px-6 py-2.5 rounded-full text-xs shadow-lg transition-transform active:scale-95"
+      >
+        Dib u deji shaandheynta (Reset Filters)
+      </button>
+    </div>
+
+  </main>
+
+  <!-- ========================================================
+       5. MODAL: "KU DAR FILIM CUSUB" (ADD MOVIE FORM)
+       ======================================================== -->
+  <div id="add-movie-modal" class="fixed inset-0 z-50 modal-backdrop hidden flex items-center justify-center p-4 overflow-y-auto">
+    <div class="modal-content rounded-2xl max-w-4xl w-full max-h-[90vh] flex flex-col overflow-hidden my-auto animate-float">
+      
+      <!-- Modal Header -->
+      <div class="px-6 py-4 border-b border-gray-800 flex items-center justify-between bg-gray-900/60">
+        <div class="flex items-center gap-3">
+          <div class="w-9 h-9 rounded-lg bg-red-600/20 text-red-500 border border-red-500/40 flex items-center justify-center">
+            <i class="fa-solid fa-plus text-base"></i>
+          </div>
+          <div>
+            <h3 class="text-lg font-bold text-white">Ku Dar Filim Cusub Qambi Filims</h3>
+            <p class="text-xs text-gray-400">Geli xogta filimka, sheekada, sanadka, iyo muuqaalka</p>
+          </div>
+        </div>
+        <button id="close-add-modal-btn" class="w-8 h-8 rounded-full bg-gray-800 text-gray-400 hover:text-white hover:bg-gray-700 flex items-center justify-center transition-colors">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <!-- Modal Body (Form + Live Preview) -->
+      <div class="p-6 overflow-y-auto flex-grow grid grid-cols-1 lg:grid-cols-3 gap-6">
+        
+        <!-- Form Inputs (2 Columns) -->
+        <form id="add-movie-form" class="lg:col-span-2 space-y-4">
+          
+          <!-- Movie Title -->
+          <div>
+            <label class="block text-xs font-semibold uppercase text-gray-300 mb-1.5">
+              Magaca Filimka (Title) <span class="text-red-500">*</span>
+            </label>
+            <input 
+              type="text" 
+              id="movie-title-input" 
+              required
+              placeholder="Tusaale: Dabin 2: Soo Noqoshadii..."
+              class="w-full bg-gray-900 border border-gray-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-red-500 transition-colors"
+            />
+          </div>
+
+          <!-- Genre, Year, Release Date (Grid) -->
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <div>
+              <label class="block text-xs font-semibold uppercase text-gray-300 mb-1.5">
+                Nooca (Genre) <span class="text-red-500">*</span>
+              </label>
+              <select 
+                id="movie-genre-input" 
+                class="w-full bg-gray-900 border border-gray-700 rounded-xl px-3 py-2.5 text-sm text-white focus:outline-none focus:border-red-500"
+              >
+                <option value="Action">Action</option>
+                <option value="Drama">Drama</option>
+                <option value="Comedy">Comedy (Majaajilo)</option>
+                <option value="Musalsal">Musalsal</option>
+                <option value="Sci-Fi">Sci-Fi</option>
+                <option value="Horror">Horror (Naxdin)</option>
+                <option value="Documentary">Taariikhi</option>
+              </select>
+            </div>
+
+            <div>
+              <label class="block text-xs font-semibold uppercase text-gray-300 mb-1.5">
+                Sanadka (Year) <span class="text-red-500">*</span>
+              </label>
+              <input 
+                type="number" 
+                id="movie-year-input" 
+                value="2026" 
+                min="1950" 
+                max="2035"
+                required
+                class="w-full bg-gray-900 border border-gray-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-red-500"
+              />
+            </div>
+
+            <div>
+              <label class="block text-xs font-semibold uppercase text-gray-300 mb-1.5">
+                Taariikhda Soo Bixitaanka
+              </label>
+              <input 
+                type="date" 
+                id="movie-date-input" 
+                class="w-full bg-gray-900 border border-gray-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-red-500"
+              />
+            </div>
+          </div>
+
+          <!-- Rating & Duration & Director -->
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <div>
+              <label class="block text-xs font-semibold uppercase text-gray-300 mb-1.5">
+                Qiimeynta (Rating: 1 - 10)
+              </label>
+              <input 
+                type="number" 
+                id="movie-rating-input" 
+                value="9.0" 
+                step="0.1" 
+                min="1" 
+                max="10" 
+                class="w-full bg-gray-900 border border-gray-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-red-500"
+              />
+            </div>
+            <div>
+              <label class="block text-xs font-semibold uppercase text-gray-300 mb-1.5">
+                Muddada (Duration)
+              </label>
+              <input 
+                type="text" 
+                id="movie-duration-input" 
+                placeholder="2h 15m" 
+                class="w-full bg-gray-900 border border-gray-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-red-500"
+              />
+            </div>
+            <div>
+              <label class="block text-xs font-semibold uppercase text-gray-300 mb-1.5">
+                Agaasimaha (Director)
+              </label>
+              <input 
+                type="text" 
+                id="movie-director-input" 
+                placeholder="Axmed Cali" 
+                class="w-full bg-gray-900 border border-gray-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-red-500"
+              />
+            </div>
+          </div>
+
+          <!-- Poster Image (Meesha Sawirka La Saarayo / Upload Box) -->
+          <div>
+            <label class="block text-xs font-semibold uppercase text-gray-300 mb-2 flex items-center justify-between">
+              <span>Sawirka Filimka (Poster) <span class="text-cyan-400">*</span></span>
+              <span class="text-[11px] text-gray-400 font-normal">Soo geli sawir ama geli Link</span>
+            </label>
+
+            <!-- Dedicated Upload Dropzone Box -->
+            <label 
+              for="movie-poster-file"
+              id="movie-poster-dropzone"
+              class="relative flex flex-col items-center justify-center p-6 border-2 border-dashed border-cyan-500/50 hover:border-cyan-400 bg-gray-900/90 hover:bg-gray-800/80 rounded-2xl cursor-pointer transition-all group overflow-hidden shadow-inner"
+            >
+              <input type="file" id="movie-poster-file" accept="image/*" class="hidden" />
+              
+              <div id="poster-dropzone-content" class="flex flex-col items-center text-center">
+                <div class="w-14 h-14 rounded-2xl bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 group-hover:scale-110 flex items-center justify-center text-2xl mb-3 shadow-lg transition-transform">
+                  <i class="fa-solid fa-cloud-arrow-up"></i>
+                </div>
+                <p class="text-sm font-bold text-white group-hover:text-cyan-300 transition-colors">
+                  Guji halkan si aad sawir uga soo doorato qalabkaaga
+                </p>
+                <p class="text-xs text-gray-400 mt-1">
+                  Dooro sawirka filimka (Computer ama Mobile)
+                </p>
+                <div class="mt-3 px-3 py-1 rounded-full bg-cyan-950/60 border border-cyan-500/40 text-[11px] text-cyan-300 font-semibold flex items-center gap-1.5">
+                  <i class="fa-solid fa-image"></i>
+                  <span id="poster-file-status">Wali sawir lama dooran</span>
+                </div>
+              </div>
+
+              <!-- Instant preview inside the dropzone when file is chosen -->
+              <div id="poster-dropzone-preview" class="hidden relative w-full h-44 rounded-xl overflow-hidden border border-cyan-500/50">
+                <img id="poster-dropzone-img" src="" alt="Selected Poster" class="w-full h-full object-cover" />
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent flex items-end justify-between p-3">
+                  <span class="text-xs font-bold text-cyan-300 flex items-center gap-1.5">
+                    <i class="fa-solid fa-circle-check text-emerald-400"></i> Sawirka waa la doortay
+                  </span>
+                  <span class="text-[11px] bg-black/80 hover:bg-black text-white px-2.5 py-1 rounded-lg border border-gray-600 transition-colors">
+                    <i class="fa-solid fa-rotate mr-1"></i> Beddel Sawirka
+                  </span>
+                </div>
+              </div>
+            </label>
+
+            <!-- Optional Link Input (URL) -->
+            <div class="mt-2.5">
+              <div class="relative">
+                <input 
+                  type="url" 
+                  id="movie-poster-url" 
+                  placeholder="Ama halkan ku qor link-ga tooska ah ee sawirka (URL)..." 
+                  class="w-full bg-gray-900/90 border border-gray-700 rounded-xl px-4 py-2 pl-9 text-xs text-gray-200 placeholder-gray-500 focus:outline-none focus:border-cyan-500 transition-colors"
+                />
+                <i class="fa-solid fa-link absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 text-xs"></i>
+              </div>
+            </div>
+          </div>
+
+          <!-- Trailer / Video URL -->
+          <div>
+            <label class="block text-xs font-semibold uppercase text-gray-300 mb-1.5">
+              Link-ga Muuqaalka / Trailer (YouTube URL ama MP4)
+            </label>
+            <input 
+              type="text" 
+              id="movie-trailer-input" 
+              placeholder="https://www.youtube.com/watch?v=... ama embed link" 
+              class="w-full bg-gray-900 border border-gray-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-red-500"
+            />
+          </div>
+
+          <!-- Description / Sheekada Filimka -->
+          <div>
+            <label class="block text-xs font-semibold uppercase text-gray-300 mb-1.5">
+              Faahfaahinta / Sheekada Filimka (Description) <span class="text-red-500">*</span>
+            </label>
+            <textarea 
+              id="movie-desc-input" 
+              rows="3" 
+              required
+              placeholder="Qor dulmar kooban oo ku saabsan sheekada filimka, qorshaha dhacdooyinka..." 
+              class="w-full bg-gray-900 border border-gray-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-red-500"
+            ></textarea>
+          </div>
+
+          <!-- Cast (Jilayaasha) & Checkbox Af-Soomaali -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 items-center">
+            <div>
+              <label class="block text-xs font-semibold uppercase text-gray-300 mb-1.5">
+                Jilayaasha (Kala saar hakad: comma)
+              </label>
+              <input 
+                type="text" 
+                id="movie-cast-input" 
+                placeholder="Maxamed, Khadar, Farxiyo" 
+                class="w-full bg-gray-900 border border-gray-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-red-500"
+              />
+            </div>
+            
+            <div class="pt-5 flex items-center gap-3">
+              <input 
+                type="checkbox" 
+                id="movie-somali-checkbox" 
+                class="w-5 h-5 rounded bg-gray-900 border-gray-700 text-red-600 focus:ring-red-500"
+                checked
+              />
+              <label for="movie-somali-checkbox" class="text-sm font-semibold text-gray-200 cursor-pointer">
+                Af-Soomaali ku hadal / Dubbed
+              </label>
+            </div>
+          </div>
+
+          <!-- Submit Button -->
+          <div class="pt-4 border-t border-gray-800 flex justify-end gap-3">
+            <button 
+              type="button" 
+              onclick="window.QAMBI_APP.closeAddMovieModal()"
+              class="px-5 py-2.5 rounded-xl border border-gray-700 hover:bg-gray-800 text-gray-300 text-sm font-medium transition-colors"
+            >
+              Kansal
+            </button>
+            <button 
+              type="submit" 
+              class="bg-gradient-to-r from-red-600 to-red-700 hover:from-red-500 hover:to-red-600 text-white font-bold px-7 py-2.5 rounded-xl text-sm flex items-center gap-2 shadow-lg shadow-red-600/30 transition-transform active:scale-95"
+            >
+              <i class="fa-solid fa-check"></i>
+              <span>Keydi Filimka</span>
+            </button>
+          </div>
+
+        </form>
+
+        <!-- Live Preview Card (Right Column) -->
+        <div class="flex flex-col items-center">
+          <span class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-3">
+            Muuqaalka Kaadhka (Live Preview)
+          </span>
+          <div class="w-full max-w-[240px] rounded-2xl overflow-hidden bg-gray-900 border border-red-500/40 shadow-2xl shadow-red-600/20">
+            <div class="relative aspect-[2/3] bg-gray-950 overflow-hidden">
+              <img 
+                id="modal-preview-poster" 
+                src="https://images.unsplash.com/photo-1536440136628-849c177e76a1?w=800&auto=format&fit=crop&q=80" 
+                alt="Preview" 
+                class="w-full h-full object-cover"
+              />
+              <div class="absolute top-2 left-2 badge-year px-2 py-0.5 text-[10px] font-bold text-white rounded">
+                <span id="modal-preview-year">2026</span>
+              </div>
+              <div class="absolute top-2 right-2 badge-4k px-1.5 py-0.5 text-[9px] font-black text-white rounded">
+                4K
+              </div>
+            </div>
+            <div class="p-3">
+              <span id="modal-preview-genre" class="text-[11px] font-bold text-cyan-400">Action</span>
+              <h4 id="modal-preview-title" class="text-sm font-bold text-white line-clamp-1 mt-0.5">
+                Cinwaanka Filimka
+              </h4>
+            </div>
+          </div>
+          <p class="text-[11px] text-gray-500 text-center mt-3 max-w-[200px]">
+            Markaad keydiso, filimku wuxuu toos ugu soo baxayaa bogga hore.
+          </p>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ========================================================
+       6. MODAL: VIDEO PLAYER (TRAILER / MOVIE EMBED)
+       ======================================================== -->
+  <div id="video-modal" class="fixed inset-0 z-50 modal-backdrop hidden flex items-center justify-center p-3 sm:p-6">
+    <div class="modal-content rounded-2xl max-w-5xl w-full flex flex-col overflow-hidden max-h-[95vh] shadow-2xl">
+      
+      <!-- Video Header -->
+      <div class="px-5 py-3 border-b border-gray-800 flex items-center justify-between bg-black/60">
+        <div class="flex items-center gap-3">
+          <span class="w-3 h-3 rounded-full bg-red-600 animate-pulse"></span>
+          <h3 id="video-modal-title" class="text-base sm:text-lg font-bold text-white truncate max-w-md">
+            Muuqaalka Filimka
+          </h3>
+        </div>
+        <button id="close-video-modal-btn" class="w-8 h-8 rounded-full bg-gray-800 text-gray-300 hover:text-white flex items-center justify-center transition-colors">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <!-- Video Player Frame -->
+      <div class="relative w-full aspect-video bg-black flex items-center justify-center">
+        <div id="video-player-container" class="w-full h-full"></div>
+      </div>
+
+      <!-- Video Meta Footer -->
+      <div class="p-5 bg-gray-950 flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-t border-gray-800">
+        <div>
+          <div class="flex items-center gap-2 text-xs text-gray-400 mb-1">
+            <span id="video-modal-genre" class="text-cyan-400 font-bold"></span>
+            <span>•</span>
+            <span id="video-modal-date"></span>
+            <span>•</span>
+            <span id="video-modal-rating" class="text-amber-400 font-bold"></span>
+          </div>
+          <p id="video-modal-desc" class="text-xs sm:text-sm text-gray-300 line-clamp-2 max-w-2xl"></p>
+        </div>
+        <button 
+          onclick="window.QAMBI_APP.closeVideoModal()"
+          class="bg-gray-800 hover:bg-gray-700 text-white text-xs font-bold px-4 py-2 rounded-lg transition-colors self-end sm:self-center shrink-0"
+        >
+          Xidh Muuqaalka
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ========================================================
+       7. MODAL: MOVIE DETAILS (FAAHFAAHIN BUUXDA)
+       ======================================================== -->
+  <div id="details-modal" class="fixed inset-0 z-50 modal-backdrop hidden flex items-center justify-center p-4 overflow-y-auto">
+    <div class="modal-content rounded-2xl max-w-3xl w-full overflow-hidden my-auto">
+      
+      <div class="relative">
+        <!-- Close Button -->
+        <button id="close-details-modal-btn" class="absolute top-4 right-4 z-20 w-9 h-9 rounded-full bg-black/70 text-gray-300 hover:text-white flex items-center justify-center transition-colors">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 p-6 sm:p-8">
+          
+          <!-- Poster -->
+          <div class="md:col-span-1">
+            <div class="rounded-xl overflow-hidden shadow-2xl border border-gray-700 aspect-[2/3]">
+              <img id="details-modal-poster" src="" alt="Poster" class="w-full h-full object-cover" />
+            </div>
+          </div>
+
+          <!-- Info -->
+          <div class="md:col-span-2 flex flex-col justify-between">
+            <div>
+              <div class="flex items-center gap-2 text-xs font-semibold mb-2">
+                <span id="details-modal-genre" class="text-cyan-400"></span>
+                <span class="text-gray-600">•</span>
+                <span id="details-modal-year" class="badge-year px-2 py-0.5 rounded text-white text-[11px]"></span>
+                <span class="text-gray-600">•</span>
+                <span id="details-modal-rating" class="text-amber-400 font-bold"></span>
+              </div>
+
+              <h2 id="details-modal-title" class="font-cinzel text-2xl sm:text-3xl font-black text-white mb-3"></h2>
+
+              <p id="details-modal-desc" class="text-sm text-gray-300 leading-relaxed mb-6"></p>
+
+              <!-- Meta List -->
+              <div class="grid grid-cols-2 gap-3 text-xs mb-6 bg-gray-900/60 p-3.5 rounded-xl border border-gray-800">
+                <div>
+                  <span class="text-gray-500 block">Taariikhda:</span>
+                  <span id="details-modal-date" class="font-semibold text-gray-200"></span>
+                </div>
+                <div>
+                  <span class="text-gray-500 block">Muddada:</span>
+                  <span id="details-modal-duration" class="font-semibold text-gray-200"></span>
+                </div>
+                <div class="col-span-2">
+                  <span class="text-gray-500 block">Agaasimaha (Director):</span>
+                  <span id="details-modal-director" class="font-semibold text-gray-200"></span>
+                </div>
+              </div>
+
+              <!-- Cast -->
+              <div class="mb-6">
+                <span class="text-xs font-bold uppercase text-gray-400 tracking-wider block mb-2">Jilayaasha:</span>
+                <div id="details-modal-cast" class="flex flex-wrap gap-1.5"></div>
+              </div>
+            </div>
+
+            <!-- Action buttons -->
+            <div class="flex items-center justify-between gap-3 pt-4 border-t border-gray-800">
+              <button 
+                id="details-delete-movie-btn"
+                class="text-xs text-red-400 hover:text-red-300 hover:bg-red-950/40 px-3 py-2 rounded-lg border border-red-900/50 transition-colors"
+                title="Tirtir filimkan"
+              >
+                <i class="fa-solid fa-trash-can mr-1"></i> Tirtir Filimka
+              </button>
+
+              <button 
+                id="details-play-now-btn"
+                class="bg-red-600 hover:bg-red-700 text-white font-bold px-6 py-2.5 rounded-xl text-xs sm:text-sm flex items-center gap-2 shadow-lg shadow-red-600/30 transition-transform active:scale-95"
+              >
+                <i class="fa-solid fa-play"></i> Daawo Hadda
+              </button>
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ========================================================
+       7.0 MODAL: USER AUTH (FIREBASE LOGIN & SIGN UP)
+       ======================================================== -->
+  <div id="auth-modal" class="fixed inset-0 z-50 modal-backdrop hidden flex items-center justify-center p-4">
+    <div class="modal-content rounded-2xl max-w-md w-full p-6 sm:p-8 animate-float border border-cyan-500/40 shadow-2xl shadow-cyan-500/10 relative">
+      
+      <!-- Close Button -->
+      <button id="close-auth-modal-btn" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-gray-800 text-gray-400 hover:text-white flex items-center justify-center transition-colors">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+
+      <!-- Modal Header -->
+      <div class="text-center mb-6">
+        <div class="w-14 h-14 rounded-2xl bg-gradient-to-tr from-blue-600 to-cyan-500 text-white mx-auto flex items-center justify-center text-2xl mb-3 shadow-lg shadow-cyan-500/20">
+          <i class="fa-solid fa-user-lock"></i>
+        </div>
+        <h3 id="auth-modal-title" class="text-xl font-black text-white">Ku Soo Dhawoow Qambi Filims</h3>
+        <p id="auth-modal-subtitle" class="text-xs text-gray-400 mt-1">Gal koontadaada ama sameyso koonto cusub</p>
+      </div>
+
+      <!-- Auth Tabs -->
+      <div class="flex rounded-xl bg-gray-900/90 p-1 mb-6 border border-gray-800">
+        <button 
+          id="auth-tab-login"
+          class="flex-1 py-2 text-xs font-bold rounded-lg text-white bg-blue-600 transition-all shadow-md"
+        >
+          Gal (Sign In)
+        </button>
+        <button 
+          id="auth-tab-signup"
+          class="flex-1 py-2 text-xs font-bold rounded-lg text-gray-400 hover:text-white transition-all"
+        >
+          Is-Diiwaangeli (Sign Up)
+        </button>
+      </div>
+
+      <!-- Error Alert Box -->
+      <div id="auth-error-box" class="hidden mb-4 p-3 rounded-xl bg-red-950/70 border border-red-500/50 text-red-300 text-xs flex items-center gap-2">
+        <i class="fa-solid fa-circle-exclamation shrink-0 text-red-400"></i>
+        <span id="auth-error-text">Khalad ayaa dhacay.</span>
+      </div>
+
+      <!-- Auth Form -->
+      <form id="auth-form" class="space-y-4">
+        <!-- Full Name (Only for Sign Up) -->
+        <div id="auth-name-group" class="hidden">
+          <label class="block text-xs font-semibold text-gray-300 uppercase tracking-wider mb-1.5">
+            Magacaaga oo Buuxa (Full Name)
+          </label>
+          <div class="relative">
+            <input 
+              type="text" 
+              id="auth-name-input" 
+              placeholder="Tusaale: Axmed Cali"
+              class="w-full bg-gray-900 border border-gray-700 rounded-xl px-4 py-2.5 pl-10 text-sm text-white focus:outline-none focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20"
+            />
+            <i class="fa-solid fa-user absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-500 text-xs"></i>
+          </div>
+        </div>
+
+        <!-- Email -->
+        <div>
+          <label class="block text-xs font-semibold text-gray-300 uppercase tracking-wider mb-1.5">
+            Email-kaaga
+          </label>
+          <div class="relative">
+            <input 
+              type="email" 
+              id="auth-email-input" 
+              required
+              placeholder="tusaale@gmail.com"
+              class="w-full bg-gray-900 border border-gray-700 rounded-xl px-4 py-2.5 pl-10 text-sm text-white focus:outline-none focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20"
+            />
+            <i class="fa-solid fa-envelope absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-500 text-xs"></i>
+          </div>
+        </div>
+
+        <!-- Password -->
+        <div>
+          <label class="block text-xs font-semibold text-gray-300 uppercase tracking-wider mb-1.5">
+            Password (Furaha Sirta)
+          </label>
+          <div class="relative">
+            <input 
+              type="password" 
+              id="auth-password-input" 
+              required
+              minlength="6"
+              placeholder="••••••••"
+              class="w-full bg-gray-900 border border-gray-700 rounded-xl px-4 py-2.5 pl-10 text-sm text-white focus:outline-none focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20"
+            />
+            <i class="fa-solid fa-lock absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-500 text-xs"></i>
+          </div>
+        </div>
+
+        <!-- Submit Button -->
+        <button 
+          type="submit" 
+          id="auth-submit-btn"
+          class="w-full mt-2 py-3 rounded-xl bg-gradient-to-r from-blue-600 via-cyan-600 to-blue-600 hover:from-blue-500 hover:to-cyan-500 text-white font-bold text-sm flex items-center justify-center gap-2 shadow-lg shadow-cyan-500/25 transition-transform active:scale-95"
+        >
+          <i class="fa-solid fa-right-to-bracket"></i>
+          <span id="auth-submit-text">Gal Hadda</span>
+        </button>
+      </form>
+
+    </div>
+  </div>
+
+  <!-- ========================================================
+       7.2 MODAL: ADMIN DASHBOARD (MAAMULKA FILIMADA)
+       ======================================================== -->
+  <div id="admin-panel-modal" class="fixed inset-0 z-50 modal-backdrop hidden flex items-center justify-center p-2 sm:p-6 overflow-y-auto">
+    <div class="modal-content rounded-2xl max-w-6xl w-full max-h-[95vh] flex flex-col overflow-hidden my-auto border border-amber-500/30">
+      
+      <!-- Admin Header -->
+      <div class="px-6 py-4 border-b border-gray-800 bg-gray-900/90 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-400 border border-amber-500/40 flex items-center justify-center text-lg shadow">
+            <i class="fa-solid fa-gauge-high"></i>
+          </div>
+          <div>
+            <h3 class="text-lg font-black text-white flex items-center gap-2">
+              <span>Qambi Filims - Admin Dashboard</span>
+              <span class="px-2 py-0.5 text-[10px] bg-amber-500/20 text-amber-300 border border-amber-500/40 rounded-full font-bold">Admin Active</span>
+            </h3>
+            <p class="text-xs text-gray-400">Maamul, tafatir (edit), tirtir (delete) ama ku dar filimada Soomaaliga iyo kuwa kale</p>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-2.5">
+          <button 
+            class="open-add-movie-btn bg-red-600 hover:bg-red-700 text-white font-bold px-3.5 py-2 rounded-xl text-xs flex items-center gap-1.5 shadow-md shadow-red-600/30 transition-transform active:scale-95"
+          >
+            <i class="fa-solid fa-plus"></i> Ku Dar Filim Cusub
+          </button>
+          
+          <button 
+            id="admin-logout-btn"
+            class="bg-gray-800 hover:bg-gray-700 text-gray-300 hover:text-white px-3 py-2 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-colors border border-gray-700"
+          >
+            <i class="fa-solid fa-right-from-bracket text-red-400"></i> Ka Bax
+          </button>
+
+          <button 
+            id="close-admin-panel-btn"
+            class="w-8 h-8 rounded-full bg-gray-800 text-gray-400 hover:text-white flex items-center justify-center transition-colors"
+          >
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Admin Body -->
+      <div class="p-6 overflow-y-auto flex-grow space-y-6">
+        
+        <!-- 4 Stats Cards -->
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+          <!-- Total -->
+          <div class="bg-gray-900/80 border border-gray-800 p-4 rounded-xl flex items-center gap-3">
+            <div class="w-10 h-10 rounded-lg bg-blue-600/20 text-blue-400 border border-blue-500/30 flex items-center justify-center text-lg">
+              <i class="fa-solid fa-film"></i>
+            </div>
+            <div>
+              <span class="text-[11px] text-gray-400 font-semibold block">Wadarta Filimada</span>
+              <strong id="admin-stat-total" class="text-xl font-black text-white">0</strong>
+            </div>
+          </div>
+
+          <!-- Somali -->
+          <div class="bg-gray-900/80 border border-blue-900/40 p-4 rounded-xl flex items-center gap-3">
+            <div class="w-10 h-10 rounded-lg bg-sky-600/20 text-sky-400 border border-sky-500/30 flex items-center justify-center text-lg">
+              <i class="fa-solid fa-language"></i>
+            </div>
+            <div>
+              <span class="text-[11px] text-gray-400 font-semibold block">Af-Soomaali</span>
+              <strong id="admin-stat-somali" class="text-xl font-black text-sky-400">0</strong>
+            </div>
+          </div>
+
+          <!-- New 2026/2025 -->
+          <div class="bg-gray-900/80 border border-red-900/40 p-4 rounded-xl flex items-center gap-3">
+            <div class="w-10 h-10 rounded-lg bg-red-600/20 text-red-400 border border-red-500/30 flex items-center justify-center text-lg">
+              <i class="fa-solid fa-fire"></i>
+            </div>
+            <div>
+              <span class="text-[11px] text-gray-400 font-semibold block">Cusub (2025-2026)</span>
+              <strong id="admin-stat-new" class="text-xl font-black text-red-400">0</strong>
+            </div>
+          </div>
+
+          <!-- Top Rated -->
+          <div class="bg-gray-900/80 border border-amber-900/40 p-4 rounded-xl flex items-center gap-3">
+            <div class="w-10 h-10 rounded-lg bg-amber-600/20 text-amber-400 border border-amber-500/30 flex items-center justify-center text-lg">
+              <i class="fa-solid fa-star"></i>
+            </div>
+            <div>
+              <span class="text-[11px] text-gray-400 font-semibold block">Ugu Qiimeyn Sareeya</span>
+              <strong id="admin-stat-top" class="text-xl font-black text-amber-400">0</strong>
+            </div>
+          </div>
+        </div>
+
+        <!-- Admin Table Search & Filter Bar -->
+        <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 bg-gray-900/60 p-3 rounded-xl border border-gray-800">
+          <div class="relative flex-1">
+            <input 
+              type="text" 
+              id="admin-search-input" 
+              placeholder="Ka raadi filimada admin-ka dhexdiisa..." 
+              class="w-full bg-gray-950 border border-gray-700 rounded-lg py-2 pl-9 pr-3 text-xs text-white focus:outline-none focus:border-amber-500"
+            />
+            <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-xs"></i>
+          </div>
+
+          <div class="flex items-center gap-2">
+            <select 
+              id="admin-somali-filter" 
+              class="bg-gray-950 border border-gray-700 rounded-lg px-2.5 py-2 text-xs text-gray-200 focus:outline-none focus:border-amber-500"
+            >
+              <option value="all">Dhammaan Luqadaha</option>
+              <option value="somali">Af-Soomaali Kaliya</option>
+              <option value="other">Caalami Kaliya</option>
+            </select>
+
+            <select 
+              id="admin-genre-filter" 
+              class="bg-gray-950 border border-gray-700 rounded-lg px-2.5 py-2 text-xs text-gray-200 focus:outline-none focus:border-amber-500"
+            >
+              <option value="all">Dhammaan Noocyada</option>
+              <option value="Action">Action</option>
+              <option value="Drama">Drama</option>
+              <option value="Comedy">Comedy</option>
+              <option value="Musalsal">Musalsal</option>
+              <option value="Sci-Fi">Sci-Fi</option>
+              <option value="Horror">Horror</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Movies Management Table -->
+        <div class="overflow-x-auto rounded-xl border border-gray-800 bg-gray-950/60 shadow">
+          <table class="w-full text-left text-xs text-gray-300">
+            <thead class="bg-gray-900/90 text-gray-400 uppercase text-[10px] tracking-wider border-b border-gray-800">
+              <tr>
+                <th class="py-3 px-4">Filimka (Poster & Title)</th>
+                <th class="py-3 px-3">Sanadka</th>
+                <th class="py-3 px-3">Nooca</th>
+                <th class="py-3 px-3">Af-Soomaali?</th>
+                <th class="py-3 px-3">Qiimeynta</th>
+                <th class="py-3 px-4 text-right">Ficillo (Actions)</th>
+              </tr>
+            </thead>
+            <tbody id="admin-movies-tbody" class="divide-y divide-gray-800/80">
+              <!-- Populated dynamically by app.js -->
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ========================================================
+       7.3 MODAL: EDIT MOVIE (TAFATIRKA FILIMKA)
+       ======================================================== -->
+  <div id="edit-movie-modal" class="fixed inset-0 z-50 modal-backdrop hidden flex items-center justify-center p-4 overflow-y-auto">
+    <div class="modal-content rounded-2xl max-w-2xl w-full max-h-[90vh] flex flex-col overflow-hidden my-auto border border-blue-500/40">
+      
+      <!-- Edit Header -->
+      <div class="px-6 py-4 border-b border-gray-800 flex items-center justify-between bg-gray-900/80">
+        <div class="flex items-center gap-3">
+          <div class="w-9 h-9 rounded-lg bg-blue-600/20 text-blue-400 border border-blue-500/40 flex items-center justify-center">
+            <i class="fa-solid fa-pen-to-square text-base"></i>
+          </div>
+          <div>
+            <h3 class="text-lg font-bold text-white">Wax Ka Beddel Filimka (Edit Movie)</h3>
+            <p class="text-xs text-gray-400">Cusboonaysii xogta, sheekada ama sawirka filimka</p>
+          </div>
+        </div>
+        <button id="close-edit-modal-btn" class="w-8 h-8 rounded-full bg-gray-800 text-gray-400 hover:text-white flex items-center justify-center transition-colors">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <!-- Edit Body -->
+      <form id="edit-movie-form" class="p-6 overflow-y-auto flex-grow space-y-4">
+        <input type="hidden" id="edit-movie-id" />
+
+        <!-- Title -->
+        <div>
+          <label class="block text-xs font-semibold uppercase text-gray-300 mb-1.5">Magaca Filimka (Title) *</label>
+          <input type="text" id="edit-movie-title" required class="w-full bg-gray-900 border border-gray-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-blue-500" />
+        </div>
+
+        <!-- Genre, Year, Date -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          <div>
+            <label class="block text-xs font-semibold uppercase text-gray-300 mb-1.5">Nooca (Genre) *</label>
+            <select id="edit-movie-genre" class="w-full bg-gray-900 border border-gray-700 rounded-xl px-3 py-2.5 text-sm text-white focus:outline-none focus:border-blue-500">
+              <option value="Action">Action</option>
+              <option value="Drama">Drama</option>
+              <option value="Comedy">Comedy</option>
+              <option value="Musalsal">Musalsal</option>
+              <option value="Sci-Fi">Sci-Fi</option>
+              <option value="Horror">Horror</option>
+              <option value="Documentary">Taariikhi</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs font-semibold uppercase text-gray-300 mb-1.5">Sanadka *</label>
+            <input type="number" id="edit-movie-year" required class="w-full bg-gray-900 border border-gray-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-blue-500" />
+          </div>
+          <div>
+            <label class="block text-xs font-semibold uppercase text-gray-300 mb-1.5">Taariikhda</label>
+            <input type="date" id="edit-movie-date" class="w-full bg-gray-900 border border-gray-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-blue-500" />
+          </div>
+        </div>
+
+        <!-- Rating, Duration, Director -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          <div>
+            <label class="block text-xs font-semibold uppercase text-gray-300 mb-1.5">Qiimeynta (1-10)</label>
+            <input type="number" id="edit-movie-rating" step="0.1" min="1" max="10" class="w-full bg-gray-900 border border-gray-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-blue-500" />
+          </div>
+          <div>
+            <label class="block text-xs font-semibold uppercase text-gray-300 mb-1.5">Muddada</label>
+            <input type="text" id="edit-movie-duration" class="w-full bg-gray-900 border border-gray-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-blue-500" />
+          </div>
+          <div>
+            <label class="block text-xs font-semibold uppercase text-gray-300 mb-1.5">Agaasimaha</label>
+            <input type="text" id="edit-movie-director" class="w-full bg-gray-900 border border-gray-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-blue-500" />
+          </div>
+        </div>
+
+        <!-- Poster URL & File -->
+        <div>
+          <label class="block text-xs font-semibold uppercase text-gray-300 mb-1.5">Sawirka Filimka (Poster URL ama Fayl)</label>
+          <div class="flex gap-2">
+            <input type="url" id="edit-movie-poster" class="flex-1 bg-gray-900 border border-gray-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-blue-500" />
+            <label class="bg-gray-800 hover:bg-gray-700 border border-gray-700 text-gray-300 px-4 py-2.5 rounded-xl text-xs font-semibold cursor-pointer flex items-center gap-1.5 shrink-0">
+              <i class="fa-solid fa-cloud-arrow-up text-blue-400"></i> Fayl
+              <input type="file" id="edit-movie-poster-file" accept="image/*" class="hidden" />
+            </label>
+          </div>
+        </div>
+
+        <!-- Trailer URL -->
+        <div>
+          <label class="block text-xs font-semibold uppercase text-gray-300 mb-1.5">Link-ga Video / Trailer</label>
+          <input type="text" id="edit-movie-trailer" class="w-full bg-gray-900 border border-gray-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-blue-500" />
+        </div>
+
+        <!-- Description -->
+        <div>
+          <label class="block text-xs font-semibold uppercase text-gray-300 mb-1.5">Faahfaahinta Sheekada (Description) *</label>
+          <textarea id="edit-movie-desc" rows="3" required class="w-full bg-gray-900 border border-gray-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-blue-500"></textarea>
+        </div>
+
+        <!-- Somali Checkbox -->
+        <div class="flex items-center gap-3">
+          <input type="checkbox" id="edit-movie-somali" class="w-5 h-5 rounded bg-gray-900 border-gray-700 text-blue-600 focus:ring-blue-500" />
+          <label for="edit-movie-somali" class="text-sm font-semibold text-gray-200 cursor-pointer">
+            Af-Soomaali ku hadal / Dubbed
+          </label>
+        </div>
+
+        <!-- Form Actions -->
+        <div class="pt-4 border-t border-gray-800 flex justify-end gap-3">
+          <button type="button" onclick="window.QAMBI_APP.closeEditMovieModal()" class="px-5 py-2.5 rounded-xl border border-gray-700 text-gray-300 text-xs font-medium hover:bg-gray-800">
+            Kansal
+          </button>
+          <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-bold px-6 py-2.5 rounded-xl text-xs flex items-center gap-2 shadow-lg shadow-blue-600/30">
+            <i class="fa-solid fa-floppy-disk"></i> Cusboonaysii Filimka
+          </button>
+        </div>
+
+      </form>
+
+    </div>
+  </div>
+
+  <!-- ========================================================
+       8. TOAST NOTIFICATIONS CONTAINER
+       ======================================================== -->
+  <div id="toast-container" class="fixed bottom-6 right-6 z-50 flex flex-col gap-2 max-w-sm pointer-events-none"></div>
+
+  <!-- ========================================================
+       9. FOOTER
+       ======================================================== -->
+  <footer class="border-t border-gray-800/80 bg-[#05070a] py-8 mt-auto">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-6">
+      
+      <!-- Brand & Copy -->
+      <div class="flex items-center gap-3">
+        <div class="w-8 h-8 rounded-lg bg-red-600 flex items-center justify-center text-white">
+          <i class="fa-solid fa-clapperboard text-sm"></i>
+        </div>
+        <p class="text-xs text-gray-400">
+          © 2026 <strong class="text-white">Qambi Filims</strong>. Xuquuqda way dhowran yihiin.
+        </p>
+      </div>
+
+      <!-- Backup & Restore Actions -->
+      <div class="flex items-center gap-3 text-xs">
+        <button 
+          id="export-data-btn"
+          class="text-gray-400 hover:text-white px-3 py-1.5 rounded-lg border border-gray-800 hover:border-gray-700 transition-colors flex items-center gap-1.5"
+          title="Soo degso nuqul xogta ah (JSON Backup)"
+        >
+          <i class="fa-solid fa-download text-gray-500"></i> Dhoofi Xogta
+        </button>
+        <button 
+          id="reset-data-btn"
+          class="text-gray-400 hover:text-red-400 px-3 py-1.5 rounded-lg border border-gray-800 hover:border-red-900/40 transition-colors flex items-center gap-1.5"
+          title="Dib ugu noqo filimadii asalka ahaa"
+        >
+          <i class="fa-solid fa-rotate-left text-gray-500"></i> Dib u Deji Xogta
+        </button>
+      </div>
+
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script type="module" src="js/firebase-config.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/three-scene.js"></script>
+  <script src="js/app.js"></script>
+
+</body>
+</html>

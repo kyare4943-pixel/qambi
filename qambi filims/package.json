@@ -1,0 +1,12 @@
+{
+  "name": "qambi-filims",
+  "version": "1.0.0",
+  "description": "Qambi Filims - 3D Cinema Showcase & Streaming Platform",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "keywords": ["cinema", "3d", "threejs", "movies", "streaming", "somali"],
+  "author": "Qambi Filims",
+  "license": "MIT"
+}

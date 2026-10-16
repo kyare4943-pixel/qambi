@@ -1,0 +1,300 @@
+/* =========================================================
+   QAMBI FILIMS - ULTIMATE 3D CINEMA STYLESHEET
+   ========================================================= */
+
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Cinzel:wght@600;700;900&display=swap');
+
+:root {
+  --primary-red: #e50914;
+  --primary-glow: rgba(229, 9, 20, 0.4);
+  --accent-gold: #ffb800;
+  --accent-cyan: #06b6d4;
+  --bg-deep: #07090e;
+  --bg-card: rgba(17, 24, 39, 0.75);
+  --border-glass: rgba(255, 255, 255, 0.08);
+  --border-glow: rgba(229, 9, 20, 0.3);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background-color: var(--bg-deep);
+  color: #f3f4f6;
+  overflow-x: hidden;
+  min-height: 100vh;
+  selection-background-color: var(--primary-red);
+  selection-color: #ffffff;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #0b0f19;
+}
+::-webkit-scrollbar-thumb {
+  background: #232b3e;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--primary-red);
+}
+
+/* Cinema Glow & Typography */
+.font-cinzel {
+  font-family: 'Cinzel', serif;
+}
+
+.text-glow {
+  text-shadow: 0 0 20px rgba(229, 9, 20, 0.6);
+}
+
+.text-gold-glow {
+  text-shadow: 0 0 20px rgba(255, 184, 0, 0.5);
+}
+
+.glass-nav {
+  background: rgba(7, 9, 14, 0.82);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border-glass);
+}
+
+.glass-panel {
+  background: rgba(15, 20, 32, 0.75);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--border-glass);
+}
+
+.glass-panel:hover {
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+/* 3D Hero Section */
+#hero-canvas-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  pointer-events: auto;
+}
+
+#hero-canvas-container canvas {
+  width: 100% !important;
+  height: 100% !important;
+  display: block;
+}
+
+.hero-overlay {
+  position: relative;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.hero-interactive {
+  pointer-events: auto;
+}
+
+/* 3D Movie Card Tilt & Reflection */
+.movie-card {
+  perspective: 1200px;
+  transform-style: preserve-3d;
+  transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.4s ease;
+  will-change: transform;
+}
+
+.movie-card-inner {
+  transform-style: preserve-3d;
+  transition: transform 0.2s ease-out;
+  border-radius: 1rem;
+  overflow: hidden;
+  background: var(--bg-card);
+  border: 1px solid var(--border-glass);
+  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.7);
+}
+
+.movie-card:hover .movie-card-inner {
+  border-color: rgba(229, 9, 20, 0.5);
+  box-shadow: 0 20px 40px -10px rgba(229, 9, 20, 0.35), 0 0 25px rgba(229, 9, 20, 0.2);
+}
+
+.movie-card-poster {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 2 / 3;
+  overflow: hidden;
+  background: #111827;
+}
+
+.movie-card-poster img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.movie-card:hover .movie-card-poster img {
+  transform: scale(1.08);
+}
+
+/* Sheen reflection effect on card */
+.movie-card-sheen {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0) 60%);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.movie-card:hover .movie-card-sheen {
+  opacity: 1;
+}
+
+/* Badges */
+.badge-somali {
+  background: linear-gradient(135deg, #0284c7, #2563eb);
+  box-shadow: 0 0 12px rgba(37, 99, 235, 0.5);
+}
+
+.badge-4k {
+  background: linear-gradient(135deg, #e50914, #b91c1c);
+  box-shadow: 0 0 12px rgba(229, 9, 20, 0.5);
+}
+
+.badge-year {
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Filter Chips */
+.filter-chip {
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.filter-chip:hover {
+  border-color: rgba(229, 9, 20, 0.5);
+  background: rgba(229, 9, 20, 0.15);
+  color: #ffffff;
+  transform: translateY(-2px);
+}
+
+.filter-chip.active {
+  background: linear-gradient(135deg, #e50914, #dc2626);
+  border-color: #ef4444;
+  color: #ffffff;
+  box-shadow: 0 4px 15px rgba(229, 9, 20, 0.4);
+}
+
+/* Modals */
+.modal-backdrop {
+  background: rgba(3, 7, 18, 0.88);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.modal-content {
+  background: #0d121f;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.9), 0 0 35px rgba(229, 9, 20, 0.2);
+}
+
+/* Shimmer animation */
+@keyframes pulseGlow {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(229, 9, 20, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 40px rgba(229, 9, 20, 0.75);
+  }
+}
+
+.pulse-glow {
+  animation: pulseGlow 3s infinite ease-in-out;
+}
+
+/* 3D Hologram Badge on Hero */
+.holo-tag {
+  background: rgba(229, 9, 20, 0.2);
+  border: 1px solid rgba(229, 9, 20, 0.6);
+  box-shadow: 0 0 15px rgba(229, 9, 20, 0.35);
+  animation: holoFlicker 4s infinite;
+}
+
+@keyframes holoFlicker {
+  0%, 100% { opacity: 1; }
+  92% { opacity: 1; }
+  93% { opacity: 0.7; }
+  94% { opacity: 1; }
+  97% { opacity: 0.85; }
+  98% { opacity: 1; }
+}
+
+/* Floating animation */
+@keyframes floatY {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+.animate-float {
+  animation: floatY 5s ease-in-out infinite;
+}
+
+/* Admin Dashboard Table */
+.admin-table-container::-webkit-scrollbar {
+  height: 6px;
+  width: 6px;
+}
+.admin-table-container::-webkit-scrollbar-thumb {
+  background: #374151;
+  border-radius: 3px;
+}
+.admin-table-container::-webkit-scrollbar-thumb:hover {
+  background: #f59e0b;
+}
+
+/* Red Marquee Ticker (Xayaysiis Qoraal Cas oo Wareegaya) */
+.marquee-wrapper {
+  overflow: hidden;
+  white-space: nowrap;
+  position: relative;
+  mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
+  -webkit-mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
+}
+
+.marquee-content {
+  display: inline-flex;
+  gap: 2.5rem;
+  animation: marqueeScroll 22s linear infinite;
+  will-change: transform;
+}
+
+.marquee-wrapper:hover .marquee-content {
+  animation-play-state: paused;
+}
+
+@keyframes marqueeScroll {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+
